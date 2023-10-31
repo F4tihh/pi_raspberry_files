@@ -24,7 +24,7 @@ def controller_init():
     global ep_blaster
     global ep_led
     if not ep_robot.initialize(conn_type="sta", proto_type='udp'):
-        print("Robot initialization failed")
+        #print("Robot initialization failed")
         exit(1)
     #ep_robot.initialize(conn_type="sta", proto_type='udp')
     ep_chassis = ep_robot.chassis
