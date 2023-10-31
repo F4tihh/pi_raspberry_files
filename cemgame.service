@@ -1,0 +1,13 @@
+[Unit]
+Description=Service for the game
+
+[Install]
+WantedBy=multi-user.target
+
+[Service]
+User=root
+Type=simple
+ExecStart=/usr/bin/python3 /home/alarm/project/src/main.py
+WorkingDirectory=/home/alarm/project/src
+Restart=always
+RestartSec=5
