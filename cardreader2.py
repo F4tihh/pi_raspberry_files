@@ -14,7 +14,7 @@ def read_process():
     except KeyboardInterrupt:
         raise
 
-if __name__ == "__main__":
-    reads = read_process()
-    print("reads:", reads)
+#if __name__ == "__main__":
+ #   reads = read_process()
+  #  print("reads:", reads)
     
