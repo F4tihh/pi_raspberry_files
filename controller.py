@@ -3,7 +3,7 @@ import curses
 from robomaster import robot,config,chassis,gimbal,blaster,led
 from game import *
 from config import cfg
-#import pygame
+import pygame
 
 ep_robot = robot.Robot()
 ep_chassis : chassis.Chassis
