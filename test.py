@@ -10,11 +10,11 @@ def read_process():
     # The `resim_id_listesi` list contains the image identification numbers.
 
     operations = {
-        "1": "Read image 1",
-        "2": "Read image 2",
-        "3": "Read image 3",
-        "4": "Read image 4",
-        "5": "Read image 5",
+        1: "Read image 1",
+        2: "Read image 2",
+        3: "Read image 3",
+        4: "Read image 4",
+        5: "Read image 5",
     }
 
     # The `operations` dictionary contains the functions that will be executed for each image identification number.
