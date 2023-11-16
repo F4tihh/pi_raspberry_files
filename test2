@@ -1,0 +1,79 @@
+import cv2
+import time
+import threading
+
+# Veritabanı resim sayısını tanımlayın
+veritabani_resim_sayisi = 15
+
+# Eşik değerini tanımlayın
+esik_degeri = 0.4  # Bu değeri ihtiyaca göre ayarlayın
+
+def benzerlik_q3(hedef_index, yeni_boyut, sonuc_saklayici):
+    try:
+        # Hedef resmi yükleyin ve belirlediğiniz boyuta ölçeklendirin
+        hedef_resim = cv2.imread(f'zz_bk{hedef_index}.jpg', cv2.IMREAD_GRAYSCALE)
+        hedef_resim = cv2.resize(hedef_resim, yeni_boyut)
+
+        # En yüksek benzerlik skorunu ve resmin adını saklamak için değişkenler
+        en_yuksek_benzerlik_isim = None
+        en_yuksek_benzerlik_skor = None
+
+        # Veritabanı resimleri üzerinde döngü oluşturun
+        for i in range(1, veritabani_resim_sayisi + 1):
+            veritabani_resmi = cv2.imread(f'z_bk{i}.jpg', cv2.IMREAD_GRAYSCALE)
+            veritabani_resmi = cv2.resize(veritabani_resmi, yeni_boyut)
+            sonuc = cv2.matchTemplate(veritabani_resmi, hedef_resim, cv2.TM_CCOEFF_NORMED)
+            _, max_val, _, _ = cv2.minMaxLoc(sonuc)
+
+            # Eşik değeri üzerindeki en benzer resmi saklayın ve aynı ID'yi atayın
+            if max_val > esik_degeri and (en_yuksek_benzerlik_skor is None or max_val > en_yuksek_benzerlik_skor):
+                en_yuksek_benzerlik_isim = f'z_bk{i}'
+                en_yuksek_benzerlik_skor = max_val
+                resim_id = i
+
+        if en_yuksek_benzerlik_isim:
+            sonuc_saklayici.append({
+                'resim': en_yuksek_benzerlik_isim,
+                'ID': resim_id
+            })
+
+    except Exception as e:
+        print(f'Hata oluştu: {e}')
+
+def main():
+    # Toplam işlem süresini ölçmek için başlangıç zamanı
+    start_time = time.time()
+
+    # İşlem için kullanılacak hedef resim sayısı
+    hedef_resim_sayisi = 15
+
+    # İşlem için kullanılacak yeni boyut
+    yeni_boyut = (50, 50)
+
+    # İş parçacıkları listesi
+    threads = []
+
+    # Benzer resimleri saklamak için bir liste
+    benzer_resimler = []
+
+    for hedef_index in range(1, hedef_resim_sayisi + 1):
+        # Her hedef resmi için bir iş parçacığı oluşturun ve başlatın
+        thread = threading.Thread(target=benzerlik_q3, args=(hedef_index, yeni_boyut, benzer_resimler))
+        thread.start()
+        threads.append(thread)
+
+    # Tüm iş parçacıklarının tamamlanmasını bekleyin
+    for thread in threads:
+        thread.join()
+
+    # Toplam işlem süresini hesaplayın ve yazdırın
+    end_time = time.time()
+    total_time = end_time - start_time
+    print(f"Toplam İşlem Süresi: {total_time} saniye")
+
+    # Benzer resimleri ve ID'lerini yazdırın
+    for benzer_resim in benzer_resimler:
+        print(f"Benzer Resim: {benzer_resim['resim']}, ID: {benzer_resim['ID']}")
+
+if __name__ == "__main__":
+    main()
