@@ -2,14 +2,15 @@ import cv2
 import time
 import threading
 
-# Veritabanı resim sayısını tanımlayın
 veritabani_resim_sayisi = 15
+esik_degeri = 0.4
 
-# Eşik değerini tanımlayın
-esik_degeri = 0.4  # Bu değeri ihtiyaca göre ayarlayın
+     # Benzer resimleri saklamak iin bir liste
+#benzer_resimler = []
 
 def benzerlik_q3(hedef_index, yeni_boyut, sonuc_saklayici):
     try:
+        # Kodun geri kalan buraya gelecek
         # Hedef resmi yükleyin ve belirlediğiniz boyuta ölçeklendirin
         hedef_resim = cv2.imread(f'zz_bk{hedef_index}.jpg', cv2.IMREAD_GRAYSCALE)
         hedef_resim = cv2.resize(hedef_resim, yeni_boyut)
@@ -30,7 +31,6 @@ def benzerlik_q3(hedef_index, yeni_boyut, sonuc_saklayici):
                 en_yuksek_benzerlik_isim = f'z_bk{i}'
                 en_yuksek_benzerlik_skor = max_val
                 resim_id = i
-
         if en_yuksek_benzerlik_isim:
             sonuc_saklayici.append({
                 'resim': en_yuksek_benzerlik_isim,
@@ -38,7 +38,7 @@ def benzerlik_q3(hedef_index, yeni_boyut, sonuc_saklayici):
             })
 
     except Exception as e:
-        print(f'Hata oluştu: {e}')
+        print(f'Hata olutu: {e}')
 
 def main():
     # Toplam işlem süresini ölçmek için başlangıç zamanı
@@ -55,7 +55,6 @@ def main():
 
     # Benzer resimleri saklamak için bir liste
     benzer_resimler = []
-
     for hedef_index in range(1, hedef_resim_sayisi + 1):
         # Her hedef resmi için bir iş parçacığı oluşturun ve başlatın
         thread = threading.Thread(target=benzerlik_q3, args=(hedef_index, yeni_boyut, benzer_resimler))
@@ -65,15 +64,18 @@ def main():
     # Tüm iş parçacıklarının tamamlanmasını bekleyin
     for thread in threads:
         thread.join()
-
     # Toplam işlem süresini hesaplayın ve yazdırın
     end_time = time.time()
     total_time = end_time - start_time
-    print(f"Toplam İşlem Süresi: {total_time} saniye")
-
-    # Benzer resimleri ve ID'lerini yazdırın
+    print(f"Toplam İşlem Süresi: {total_time} saniye")            
+    
+    # Benzer resimleri ve ID'lerini yaz
     for benzer_resim in benzer_resimler:
         print(f"Benzer Resim: {benzer_resim['resim']}, ID: {benzer_resim['ID']}")
+
+    # Benzer resimlerden elde edilen ID'leri resim_id_listesi olarak ekleyin
+    resim_id_listesi = [benzer_resim['ID'] for benzer_resim in benzer_resimler]
+    print("Resim ID'leri:", resim_id_listesi)
 
 if __name__ == "__main__":
     main()
