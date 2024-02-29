@@ -3,6 +3,7 @@ from time import sleep
 GPIO.setmode(GPIO.BCM)
 
 BUTTON = 12
+#BUTTON
 LED = 20
 GPIO.setup(BUTTON, GPIO.IN)
 GPIO.setup(LED, GPIO.OUT)
