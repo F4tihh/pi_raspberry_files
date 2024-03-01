@@ -2,7 +2,7 @@ from time import sleep, time
 
 def read_process():
     # Resim kimlik kartları listesi
-    resim_id_listesi = [1, 2, 3, 4, 5]
+    resim_id_listesi = [1, 2, 3, 4, 5, 6]
 
     try:
         reads = dict()
